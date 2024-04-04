@@ -42,6 +42,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import EventsPage from "./pages/EventsPage.jsx";
 import Cookies from "js-cookie";
+import ShopActivation from "./pages/Shop/ShopActivation.jsx";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -119,9 +120,20 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+         <Route
+          path="/user/track/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+        
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
         {/* shop Routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
+        <Route path="/activate-shop" element={<ShopActivation/>} />
+
         <Route path="/shop-login" element={<ShopLoginPage />} />
         <Route
           path="/shop/:id"

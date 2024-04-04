@@ -59,7 +59,7 @@ export const updateUserInformation =
       dispatch({
         type: "updateUserInfoRequest",
       });
-
+      const token = localStorage.getItem("token")
       const { data } = await axios.put(
         `${server}/api/v2/user/update-user-info`,
         {
@@ -69,9 +69,8 @@ export const updateUserInformation =
           name,
         },
         {
-          withCredentials: true,
           headers: {
-            "Access-Control-Allow-Credentials": true,
+            "x-access-token": token,
           },
         }
       );
@@ -96,7 +95,7 @@ export const updatUserAddress =
       dispatch({
         type: "updateUserAddressRequest",
       });
-
+      const token = localStorage.getItem('token')
       const { data } = await axios.put(
         `${server}/api/v2/user/update-user-addresses`,
         {
@@ -107,7 +106,9 @@ export const updatUserAddress =
           zipCode,
           addressType,
         },
-        { withCredentials: true }
+       { headers: {
+          "x-access-token": token,
+        },}
       );
 
       dispatch({

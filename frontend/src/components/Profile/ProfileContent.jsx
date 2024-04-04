@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllOrdersOfUser } from "../../redux/actions/order";
 
-const ProfileContent = ({ active }) => {
+const ProfileContent = ({ active, setActive }) => {
   const { user, error, successMessage } = useSelector((state) => state.user);
   const [name, setName] = useState(user && user.name);
   const [email, setEmail] = useState(user && user.email);
@@ -49,42 +49,47 @@ const ProfileContent = ({ active }) => {
     dispatch(updateUserInformation(name, email, phoneNumber, password));
   };
 
-  const handleImage = async (e) => {
-    console.log(":uploading image")
-    const reader = new FileReader();
-    console.log(reader)
+const handleImage = async (e) => {
+  console.log("Uploading image...");
+  
+  const reader = new FileReader();
+  reader.onload = async () => {
+    if (reader.readyState === 2) {
+      console.log("FileReader result:", reader.result);
+      const avatarData = reader.result;
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        console.log("FileReader result:", reader.result);
+      setAvatar(avatarData); // Assuming setAvatar is a function to update the state
 
-        setAvatar(reader.result);
-        console.log(avatar);
-        axios
-          .put(
-            `${server}/api/v2/user/update-avatar`,
-            { avatar: avatar },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((response) => {
-            console.log("done")
-            dispatch(loadUser());
-            toast.success("avatar updated successfully!");
-          })
-          .catch((error) => {
-            console.error("Avatar upload failed:", error);
-            toast.error("Avatar upload failed. Please try again.");
-          });
+      try {
+        const token = localStorage.getItem("token");
+        console.log("Token:", token);
+        const response = await axios.put(
+          `${server}/api/v2/user/update-avatar`,
+          { avatar: avatarData },
+          {
+            headers: {
+              "x-access-token": token,
+            },
+          }
+        );
+        if (response.status===200) {
+          console.log("Avatar updated successfully!");
+          toast.success("Avatar updated successfully!");
+          dispatch(loadUser());
+        }
+      } catch (error) {
+        console.error("Avatar upload failed:", error);
+        toast.error("Avatar upload failed. Please try again.");
       }
-      else{
-        console.log("error");
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
+    } else {
+      console.log("Error occurred while reading file.");
+    }
   };
+
+  reader.readAsDataURL(e.target.files[0]);
+};
+
+  
 
   return (
     <div className="w-full">
@@ -196,7 +201,7 @@ const ProfileContent = ({ active }) => {
       {/* Change Password */}
       {active === 6 && (
         <div>
-          <ChangePassword />
+          <ChangePassword setActive={setActive} />
         </div>
       )}
 
@@ -277,7 +282,7 @@ const AllOrders = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: "PKR. " + item.totalPrice,
         status: item.status,
       });
     });
@@ -450,7 +455,7 @@ const TrackOrder = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: "PKR. " + item.totalPrice,
         status: item.status,
       });
     });
@@ -468,30 +473,37 @@ const TrackOrder = () => {
   );
 };
 
-const ChangePassword = () => {
+const ChangePassword = ({setActive}) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const passwordChangeHandler = async (e) => {
     e.preventDefault();
-
-    await axios
-      .put(
-        `${server}/user/update-user-password`,
+    const token = localStorage.getItem("token");
+    
+    try {
+      const response = await axios.put(
+        `${server}/api/v2/user/update-user-password`,
         { oldPassword, newPassword, confirmPassword },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success(res.data.success);
-        setOldPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+      if(response.status===200){
+      setActive(1)
+      toast.success(response.message);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }      
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+  
   return (
     <div className="w-full px-5">
       <h1 className="block text-[25px] text-center font-[600] text-[#000000ba] pb-2">
