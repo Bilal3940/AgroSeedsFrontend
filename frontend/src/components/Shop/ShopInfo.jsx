@@ -14,18 +14,30 @@ const ShopInfo = ({ isOwner }) => {
   const {id} = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
+  const seller_token = localStorage.getItem('seller_token');
   useEffect(() => {
-    dispatch(getAllProductsShop(id));
-    setIsLoading(true);
-    axios.get(`${server}/api/v2/shop/get-shop-info/${id}`).then((res) => {
-     setData(res.data.shop);
-     setIsLoading(false);
-    }).catch((error) => {
-      console.log(error);
-      setIsLoading(false);
-    })
-  }, [])
+    const fetchShopData = async () => {
+      try {
+        dispatch(getAllProductsShop(id));
+        setIsLoading(true);
+        const response = await axios.get(`${server}/api/v2/shop/get-shop-info/${id}`,
+        {
+          headers:{
+            "x-access-token":seller_token
+          }
+        });
+        setData(response.data.shop);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
+    };
+  
+    fetchShopData();
+  
+  }, []);
+  
   
 
   const logoutHandler = async () => {
@@ -62,7 +74,7 @@ const ShopInfo = ({ isOwner }) => {
           />
         </div>
         <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
-        <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">
+        <p className="text-[16px] text-[#000000a6] p-[10px] flex justify-center">
           {data.description}
         </p>
       </div>

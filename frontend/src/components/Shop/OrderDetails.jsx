@@ -14,6 +14,7 @@ const OrderDetails = () => {
   const dispatch = useDispatch();
   const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const seller_token = localStorage.getItem("seller_token");
 
   const { id } = useParams();
 
@@ -24,22 +25,25 @@ const OrderDetails = () => {
   const data = orders && orders.find((item) => item._id === id);
 
   const orderUpdateHandler = async (e) => {
-    await axios
-      .put(
-        `${server}/order/update-order-status/${id}`,
+    try {
+      const response = await axios.put(
+        `${server}/api/v2/order/update-order-status/${id}`,
         {
           status,
         },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success("Order updated!");
-        navigate("/dashboard-orders");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+        {
+          headers: {
+            "x-access-token": seller_token,
+          },
+        }
+      );
+      toast.success("Order updated!");
+      navigate("/dashboard-orders");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
+  
 
   const refundOrderUpdateHandler = async (e) => {
     await axios

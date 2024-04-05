@@ -198,7 +198,6 @@ const ShopLogin = () => {
     try {
       const res = await axios.post(
         `${server}/api/v2/shop/login-shop`,
-        // "http://localhost:8000/api/v2/shop/login-shop",
         {
           email,
           password,
@@ -210,8 +209,8 @@ const ShopLogin = () => {
       navigate("/dashboard");
       window.location.reload(true);
     } catch (err) {
-      console.log(err)
-      // toast.error(err.response.data.message);
+      // console.log(err)
+      toast.error(err.message);
     }
   };
 

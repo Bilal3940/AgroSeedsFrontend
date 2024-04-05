@@ -34,10 +34,10 @@ export const loadSeller = () => async (dispatch) => {
     dispatch({
       type: "LoadSellerRequest",
     });
-    const token = localStorage.getItem("seller_token")
+    const seller_token = localStorage.getItem("seller_token")
     const { data } = await axios.get(`${server}/api/v2/shop/getSeller`, {
       headers: {
-        'x-access-token': token,
+        "x-access-token": seller_token
       },
     });
     dispatch({

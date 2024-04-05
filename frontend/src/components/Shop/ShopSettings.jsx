@@ -17,42 +17,44 @@ const ShopSettings = () => {
   const [address, setAddress] = useState(seller && seller.address);
   const [phoneNumber, setPhoneNumber] = useState(seller && seller.phoneNumber);
   const [zipCode, setZipcode] = useState(seller && seller.zipCode);
-
+  const seller_token = localStorage.getItem('seller_token');
   const dispatch = useDispatch();
 
   const handleImage = async (e) => {
     const reader = new FileReader();
-
-    reader.onload = () => {
+  
+    reader.onload = async () => {
       if (reader.readyState === 2) {
         setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/shop/update-shop-avatar`,
+        
+        try {
+          const response = await axios.put(
+            `${server}/api/v2/shop/update-shop-avatar`,
             { avatar: reader.result },
             {
-              withCredentials: true,
+              headers: {
+                "x-access-token": seller_token,
+              },
             }
-          )
-          .then((res) => {
-            dispatch(loadSeller());
-            toast.success("Avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error.response.data.message);
-          });
+          );
+          dispatch(loadSeller());
+          toast.success("Avatar updated successfully!");
+        } catch (error) {
+          toast.error(error.response.data.message);
+        }
       }
     };
-
+  
     reader.readAsDataURL(e.target.files[0]);
   };
+  
 
   const updateHandler = async (e) => {
     e.preventDefault();
-
-    await axios
-      .put(
-        `${server}/shop/update-seller-info`,
+  
+    try {
+      const response = await axios.put(
+        `${server}/api/v2/shop/update-seller-info`,
         {
           name,
           address,
@@ -60,16 +62,24 @@ const ShopSettings = () => {
           phoneNumber,
           description,
         },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success("Shop info updated succesfully!");
-        dispatch(loadSeller());
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+        {
+          headers: {
+            "x-access-token": seller_token,
+          },
+        }
+      );
+      if(response.status===201){
+      toast.success("Shop info updated successfully!");
+      dispatch(loadSeller());
+    }
+    else{
+      toast.error(response.message)
+    }
+    } catch (error) {
+      toast.error("Network Error");
+    }
   };
+  
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
