@@ -190,6 +190,12 @@ const handleImage = async (e) => {
           <AllRefundOrders />
         </div>
       )}
+      {active=== 4 &&(
+        <div>
+          <Inbox/>
+        </div>
+      )
+      }
 
       {/* Track order */}
       {active === 5 && (
@@ -386,6 +392,15 @@ const AllRefundOrders = () => {
       />
     </div>
   );
+};
+const Inbox = () => {
+  return (
+    <div>
+        <input type="text"placeholder='message' />
+        <button>Send Message</button>
+
+    </div>
+  )
 };
 
 const TrackOrder = () => {

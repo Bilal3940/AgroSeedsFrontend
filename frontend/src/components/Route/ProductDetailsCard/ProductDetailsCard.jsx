@@ -24,7 +24,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const [click, setClick] = useState(false);
   //   const [select, setSelect] = useState(false);
 
-  const handleMessageSubmit = () => {};
+  const handleMessageSubmit = () => {
+    
+  };
 
   const decrementCount = () => {
     if (count > 1) {
@@ -102,9 +104,9 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
                   onClick={handleMessageSubmit}
                 >
-                  {/* <span className="text-[#fff] flex items-center">
+                  <span className="text-[#fff] flex items-center">
                     Send Message <AiOutlineMessage className="ml-1" />
-                  </span> */}
+                  </span>
                 </div>
                 <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
               </div>

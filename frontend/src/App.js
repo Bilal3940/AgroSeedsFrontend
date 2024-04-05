@@ -43,6 +43,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import EventsPage from "./pages/EventsPage.jsx";
 import Cookies from "js-cookie";
 import ShopActivation from "./pages/Shop/ShopActivation.jsx";
+import Inbox from "./components/inbox/Inbox.jsx";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -104,6 +105,14 @@ const App = () => {
             />
         
         <Route path="/order/success" element={<OrderSuccessPage />} />
+        <Route
+          path="/inbox"
+          element={
+            <ProtectedRoute>
+              <Inbox />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/profile"
           element={
