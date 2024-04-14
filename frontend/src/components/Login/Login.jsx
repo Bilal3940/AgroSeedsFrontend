@@ -59,6 +59,7 @@ const Login = () => {
         });
         if (response.ok) {
             const res = await response.json(); // Parse response JSON
+            console.log(res.otp)
             localStorage.setItem("token", res.token);
             navigate("/"); // Navigate to homepage
             toast.success("Login Success!");

@@ -44,6 +44,7 @@ import EventsPage from "./pages/EventsPage.jsx";
 import Cookies from "js-cookie";
 import ShopActivation from "./pages/Shop/ShopActivation.jsx";
 import Inbox from "./components/inbox/Inbox.jsx";
+import DashboardMessages from "./components/Shop/DashboardMessages.jsx";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -109,7 +110,7 @@ const App = () => {
           path="/inbox"
           element={
             <ProtectedRoute>
-              <Inbox />
+              <Inbox/>
             </ProtectedRoute>
           }
         />
@@ -119,6 +120,14 @@ const App = () => {
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <DashboardMessages/>
+            </SellerProtectedRoute>
           }
         />
         <Route

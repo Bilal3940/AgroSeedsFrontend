@@ -41,13 +41,9 @@ const ShopInfo = ({ isOwner }) => {
   
 
   const logoutHandler = async () => {
-    axios.get(`${server}/api/v2/shop/logout`,{
-      withCredentials: true,
-    })
-    .then((res)=>{
+    localStorage.removeItem("seller_token")
     window.location.reload(true);
     navigate("/shop-login")
-  })
   };
 
   const totalReviewsLength =

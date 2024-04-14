@@ -15,17 +15,26 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../../redux/actions/wishlist";
-
+import { server } from "../../../server";
+import axios  from "axios";
+import {useNavigate} from "react-router-dom"
 const ProductDetailsCard = ({ setOpen, data }) => {
+  console.log(data)
   const { cart } = useSelector((state) => state.cart);
+  console.log(cart)
+  const { user } = useSelector((state) => state.user);
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
+  const navigate = useNavigate();
   //   const [select, setSelect] = useState(false);
+// console.log(cart,"user", user)
+console.log(cart[0].shop._id)
+  const handleMessageSubmit = async(id) => {
+    // const item = cart && cart.find((i) => i._id === id);
+    // console.log(item)
 
-  const handleMessageSubmit = () => {
-    
   };
 
   const decrementCount = () => {
@@ -71,6 +80,23 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     dispatch(addToWishlist(data));
   };
 
+  
+  const handlecreateConversation = async () => {
+    try {
+      const response = await axios.post(`${server}/api/v2/conversation/create-new-conversation`, {
+        groupTitle: data.shop.name,
+        userId: user._id,
+        sellerId: data.shop._id,
+      });
+      console.log(response.data);
+      console.log("conversation created")
+      navigate("/inbox") // Assuming the response contains the newly created conversation data
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+      throw error; // Re-throw the error for the caller to handle
+    }
+  };
+
   return (
     <div className="bg-[#fff]">
       {data ? (
@@ -102,10 +128,10 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </div>
                 <div
                   className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
-                  onClick={handleMessageSubmit}
+                  // onClick={handleMessageSubmit()}
                 >
-                  <span className="text-[#fff] flex items-center">
-                    Send Message <AiOutlineMessage className="ml-1" />
+                  <span onClick={handlecreateConversation} className="text-[#fff] flex items-center">
+                    Send Message <AiOutlineMessage  className="ml-1" />
                   </span>
                 </div>
                 <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
