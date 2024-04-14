@@ -30,7 +30,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
   const navigate = useNavigate();
   //   const [select, setSelect] = useState(false);
 // console.log(cart,"user", user)
-console.log(cart[0].shop._id)
+// console.log(cart[0].shop._id)
   const handleMessageSubmit = async(id) => {
     // const item = cart && cart.find((i) => i._id === id);
     // console.log(item)

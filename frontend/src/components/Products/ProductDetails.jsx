@@ -20,6 +20,7 @@ import Ratings from "./Ratings";
 import axios from "axios";
 
 const ProductDetails = ({ data }) => {
+  console.log(data)
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
@@ -30,7 +31,7 @@ const ProductDetails = ({ data }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllProductsShop(data && data?.shop._id));
+    dispatch(getAllProductsShop(data && data?._id));
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
       setClick(true);
     } else {
@@ -125,21 +126,20 @@ const ProductDetails = ({ data }) => {
                   className="w-[80%]"
                 />
                 <div className="w-full flex">
-                  {data &&
-                    data.images.map((i, index) => (
+
                       <div
                         className={`${
                           select === 0 ? "border" : "null"
                         } cursor-pointer`}
                       >
                         <img
-                          src={`${i?.url}`}
+                          src={`${data?.image}`}
                           alt=""
                           className="h-[200px] overflow-hidden mr-3 mt-3"
-                          onClick={() => setSelect(index)}
+                          onClick={() => setSelect(data?.image)}
                         />
                       </div>
-                    ))}
+
                   <div
                     className={`${
                       select === 1 ? "border" : "null"
@@ -206,17 +206,17 @@ const ProductDetails = ({ data }) => {
                   </span>
                 </div>
                 <div className="flex items-center pt-8">
-                  <Link to={`/shop/preview/${data?.shop._id}`}>
+                  <Link to={`/shop/preview/${data?._id}`}>
                     <img
-                      src={`${data?.shop?.avatar?.url}`}
+                      src={`${data?.image}`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
                   </Link>
                   <div className="pr-8">
-                    <Link to={`/shop/preview/${data?.shop._id}`}>
+                    <Link to={`/shop/preview/${data?._id}`}>
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
-                        {data.shop.name}
+                        {data?.name}
                       </h3>
                     </Link>
                     <h5 className="pb-3 text-[15px]">
@@ -338,29 +338,29 @@ const ProductDetailsInfo = ({
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
           <div className="w-full 800px:w-[50%]">
-            <Link to={`/shop/preview/${data.shop._id}`}>
+            <Link to={`/shop/preview/${data?._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${data?.shop?.avatar?.url}`}
+                  src={`${data?.avatar?.url}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
                 <div className="pl-3">
-                  <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
+                  <h3 className={`${styles.shop_name}`}>{data?.name}</h3>
                   <h5 className="pb-2 text-[15px]">
                     ({averageRating}/5) Ratings
                   </h5>
                 </div>
               </div>
             </Link>
-            <p className="pt-2">{data.shop.description}</p>
+            <p className="pt-2">{data?.description}</p>
           </div>
           <div className="w-full 800px:w-[50%] mt-5 800px:mt-0 800px:flex flex-col items-end">
             <div className="text-left">
               <h5 className="font-[600]">
                 Joined on:{" "}
                 <span className="font-[500]">
-                  {data.shop?.createdAt?.slice(0, 10)}
+                  {data?.createdAt?.slice(0, 10)}
                 </span>
               </h5>
               <h5 className="font-[600] pt-3">

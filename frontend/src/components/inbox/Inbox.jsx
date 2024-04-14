@@ -3,12 +3,15 @@ import React, { useRef, useState } from "react";
 import { useEffect } from "react";
 import { server } from "../../server";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { TfiGallery } from "react-icons/tfi";
 import socketIO from "socket.io-client";
 import { format } from "timeago.js";
+import Loader from "../Layout/Loader";
+import { BsArrowLeft } from "react-icons/bs";
+import { RxCross1 } from "react-icons/rx";
 const ENDPOINT = "http://localhost:4000/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
@@ -25,6 +28,7 @@ const Inbox = () => {
   const [images, setImages] = useState();
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     socketId.on("getMessage", (data) => {
@@ -44,6 +48,7 @@ const Inbox = () => {
 
   useEffect(() => {
     const getConversation = async () => {
+      setLoading(true);
       try {
         const resonse = await axios.get(
           `${server}/api/v2/conversation/get-all-conversation-user/${user?._id}`,
@@ -54,8 +59,12 @@ const Inbox = () => {
           }
         );
         setConversations(resonse.data.conversations);
+      
       } catch (error) {
         console.log(error);
+      }
+      finally{
+        setLoading(false);
       }
     };
     getConversation();
@@ -142,7 +151,6 @@ const Inbox = () => {
         lastMessageId: user._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
         setNewMessage("");
       })
       .catch((error) => {
@@ -210,11 +218,27 @@ const Inbox = () => {
     <div className="w-[90%] bg-white m-5 h-[85vh] overflow-y-scroll rounded">
       {!open && (
         <>
+        <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}} >
+          <div className=" flex items-center pl-[10px]" >
+            <Link to="/dashboard" >
+            <BsArrowLeft size={"1.7rem"} style={{cursor:"pointer"}} />
+            </Link>
+          </div>
+          <div>
           <h1 className="text-center text-[30px] py-3 font-Poppins">
             All Messages
           </h1>
+          </div>
+          <div>
+
+          </div>
+          </div>
           {/* All messages list */}
-          {conversations &&
+          {loading? (
+          <>
+          <Loader/>
+          </>
+          ): conversations &&
             conversations.map((item, index) => (
               <MessageList
                 data={item}
@@ -353,7 +377,7 @@ const UserInbox = ({
             <h1>{activeStatus ? "Active Now" : ""}</h1>
           </div>
         </div>
-        <AiOutlineArrowRight
+        <RxCross1
           size={20}
           className="cursor-pointer"
           onClick={() => setOpen(false)}

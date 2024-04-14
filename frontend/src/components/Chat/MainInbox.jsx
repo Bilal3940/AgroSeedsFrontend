@@ -3,6 +3,9 @@ import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import styles from "../../styles/styles";
 import { TfiGallery } from "react-icons/tfi";
 import { format } from "timeago.js";
+import { TbArrowsCross } from "react-icons/tb";
+import { CgCross } from "react-icons/cg";
+import { RxCross1 } from "react-icons/rx";
 const MainInbox = ({
     scrollRef,
     setOpen,
@@ -27,12 +30,13 @@ const MainInbox = ({
             />
             <div className="pl-3">
               <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-              <h1>{activeStatus ? "Active Now" : ""}</h1>
+              <h1>{activeStatus ? "Active Now" : "no"}</h1>
             </div>
           </div>
-          <AiOutlineArrowRight
+          <RxCross1
+
             size={20}
-            className="cursor-pointer"
+            className="cursor-pointer mr-[10px]"
             onClick={() => setOpen(false)}
           />
         </div>
