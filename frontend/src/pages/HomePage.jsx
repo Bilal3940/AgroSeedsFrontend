@@ -13,7 +13,7 @@ const HomePage = () => {
         <br />
         <FeaturedProduct />
         <Sponsored />
-        <Footer />
+        <Footer />s
     </div>
   )
 }

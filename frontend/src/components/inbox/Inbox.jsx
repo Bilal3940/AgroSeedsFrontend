@@ -12,7 +12,8 @@ import { format } from "timeago.js";
 import Loader from "../Layout/Loader";
 import { BsArrowLeft } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
-const ENDPOINT = "http://localhost:4000/";
+import {toast } from "react-toastify"
+const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const Inbox = () => {
@@ -37,7 +38,10 @@ const Inbox = () => {
         text: data.text,
         createdAt: Date.now(),
       });
+
+
     });
+
   }, []);
 
   useEffect(() => {
@@ -211,7 +215,7 @@ const Inbox = () => {
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ beahaviour: "smooth" });
+    scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
   return (
@@ -220,7 +224,7 @@ const Inbox = () => {
         <>
         <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between"}} >
           <div className=" flex items-center pl-[10px]" >
-            <Link to="/dashboard" >
+            <Link to="/profile" >
             <BsArrowLeft size={"1.7rem"} style={{cursor:"pointer"}} />
             </Link>
           </div>
