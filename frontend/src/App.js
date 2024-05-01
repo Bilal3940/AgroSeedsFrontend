@@ -16,6 +16,7 @@ import {
   ShopCreatePage,
   ShopLoginPage,
   OrderDetailsPage,
+  CropYieldPrediction,
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
@@ -85,7 +86,7 @@ const App = () => {
         <Route path="/sign-up" element={<SignupPage />} />
         <Route path="/products" element={ <ProtectedRoute><ProductsPage /></ProtectedRoute>} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
-        <Route path="/yield-pediction" element={<BestSellingPage />} />
+        <Route path="/yield-pediction" element={<CropYieldPrediction />} />
         <Route path="/price-prediction" element={<EventsPage/>} />
         <Route path="/faq" element={<FAQPage />} />
         <Route

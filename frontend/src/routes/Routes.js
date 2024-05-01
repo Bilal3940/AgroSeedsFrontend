@@ -2,7 +2,7 @@ import LoginPage from "../pages/Login";
 import SignupPage from "../pages/SignupPage";
 import HomePage from "../pages/HomePage";
 import ProductsPage from "../pages/ProductsPage";
-import BestSellingPage from "../pages/BestSellingPage";
+import CropYieldPrediction from "../pages/CropYieldPrediction";
 import FAQPage from "../pages/FAQPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import PaymentPage from "../pages/PaymentPage";
@@ -19,7 +19,7 @@ export {
     SignupPage,
     HomePage,
     ProductsPage,
-    BestSellingPage,
+    CropYieldPrediction,
     FAQPage,
     CheckoutPage,
     PaymentPage,

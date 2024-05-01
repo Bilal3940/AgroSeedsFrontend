@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import logo from "../../Assests/agro_seeds_logo.png"
 import { categoriesData, productData } from "../../static/data";
+import { useTranslation } from 'react-i18next';
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -18,6 +19,7 @@ import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
 
 const Header = ({ activeHeading }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const { isSeller } = useSelector((state) => state.seller);
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -66,7 +68,7 @@ const Header = ({ activeHeading }) => {
           <div className="w-[50%] relative">
             <input
               type="text"
-              placeholder="Search Product..."
+              placeholder={t("header-search")}
               value={searchTerm}
               onChange={handleSearchChange}
               className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
@@ -99,7 +101,7 @@ const Header = ({ activeHeading }) => {
           <div className={`${styles.button}`}>
             <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
               <h1 className="text-[#fff] flex items-center">
-                {isSeller ? "Go Dashboard" : "Become Seller"}{" "}
+              {isSeller ? t("header-dashboard") : t("become-seller")}
                 <IoIosArrowForward className="ml-1" />
               </h1>
             </Link>

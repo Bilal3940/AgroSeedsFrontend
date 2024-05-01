@@ -9,7 +9,7 @@ export const navItems = [
       url: "/products",
     },
     {
-      title: "Yield Predicions",
+      title: "Yield Predictions",
       url: "/yield-pediction",
     },
     {

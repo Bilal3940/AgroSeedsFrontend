@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "../../../styles/styles";
 import ProductCard from "../ProductCard/ProductCard";
+import { useTranslation } from 'react-i18next';
 
 const FeaturedProduct = () => {
+  const { t } = useTranslation();
   const seeds = [
     {
       id: 1,
@@ -58,7 +60,7 @@ const FeaturedProduct = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Featured Products</h1>
+          <h1>{t("featured-pro-heading")}</h1>
         </div>
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
         {/* {

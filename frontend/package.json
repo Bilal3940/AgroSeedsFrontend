@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/data-grid": "^4.0.0-alpha.37",
+    "@mui/material": "^5.15.15",
     "@paypal/react-paypal-js": "^7.8.3",
     "@reduxjs/toolkit": "^1.9.3",
     "@stripe/react-stripe-js": "^2.1.0",
@@ -16,7 +17,7 @@
     "braintree-web": "^3.101.3",
     "braintree-web-drop-in": "^1.42.0",
     "country-state-city": "^3.1.2",
-    "i18next": "^23.7.6",
+    "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.4.2",
     "js-cookie": "^3.0.1",

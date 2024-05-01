@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
+import { useTranslation } from 'react-i18next';
 
 const Hero = () => {
+  const { t } = useTranslation();
   return (
     <div
       className={`relative min-h-[70vh] 400px:min-h-[80vh] w-full bg-no-repeat ${styles.noramlFlex}`}
@@ -15,18 +17,16 @@ const Hero = () => {
         <h1
           className={`text-[45px] leading-[1.2] 800px:text-[60px] text-[#ebe8e2] font-[700] capitalize`}
         >
-          Where Dreams Take Root <br /> Your Seed Haven.
+          {/* Where Dreams Take Root <br /> Your Seed Haven. */}
+          {t('hero-heading')}
         </h1>
         <p className="pt-5 text-[18px] font-[Poppins] font-[400] text-[#ebe8e2]">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Beatae,
-          assumenda? Quisquam itaque <br /> exercitationem labore vel, dolore
-          quidem asperiores, laudantium temporibus soluta optio consequatur{" "}
-          <br /> aliquam deserunt officia. Dolorum saepe nulla provident.
+         {t("hero-para")}
         </p>
         <Link to="/products" className="inline-block">
             <div className={`${styles.button} mt-5`}>
                  <span className="text-[#fff] font-[Poppins] text-[18px]">
-                    Shop Now
+                   {t("hero-shop")}
                  </span>
             </div>
         </Link>
