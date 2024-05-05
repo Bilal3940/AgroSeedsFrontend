@@ -46,6 +46,7 @@ import Cookies from "js-cookie";
 import ShopActivation from "./pages/Shop/ShopActivation.jsx";
 import Inbox from "./components/inbox/Inbox.jsx";
 import DashboardMessages from "./components/Shop/DashboardMessages.jsx";
+import ShopWithDrawMoneyPage from "./pages/Shop/ShopWithdrawMoneyPage.jsx";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -95,6 +96,14 @@ const App = () => {
             <ProtectedRoute>
               <CheckoutPage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <ShopWithDrawMoneyPage />
+            </SellerProtectedRoute>
           }
         />
           

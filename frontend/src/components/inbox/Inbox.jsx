@@ -13,7 +13,7 @@ import Loader from "../Layout/Loader";
 import { BsArrowLeft } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
 import {toast } from "react-toastify"
-const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
+const ENDPOINT = "http://localhost:4000/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const Inbox = () => {
@@ -38,10 +38,14 @@ const Inbox = () => {
         text: data.text,
         createdAt: Date.now(),
       });
-
-
+      console.log(data)
+      console.log(user._id)
+      if(data.senderId!== user._id){
+        console.log("not same id")
+      // Display a toast notification
+      toast.success("You've got a new message!");
+      }
     });
-
   }, []);
 
   useEffect(() => {

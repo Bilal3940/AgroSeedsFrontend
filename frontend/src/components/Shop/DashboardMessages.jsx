@@ -13,6 +13,7 @@ import MessageList from "../Chat/MessageList";
 import MainInbox from "../Chat/MainInbox";
 import { BsArrowLeft } from "react-icons/bs";
 import Loader from "../Layout/Loader";
+import { toast } from "react-toastify";
 const ENDPOINT = "http://localhost:4000/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
@@ -38,7 +39,9 @@ const DashboardMessages = () => {
         text: data.text,
         createdAt: Date.now(),
       });
+
     });
+
   }, []);
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const DashboardMessages = () => {
             }
           }
         );
-        console.log(resonse.data.conversations)
+        // console.log(resonse.data.conversations)
         setConversations(resonse.data.conversations);
         setLoading(false);
       } catch (error) {
@@ -150,7 +153,7 @@ const DashboardMessages = () => {
         lastMessageId: seller._id,
       })
       .then((res) => {
-        console.log(res.data.conversation);
+        // console.log(res.data.conversation);
         setNewMessage("");
       })
       .catch((error) => {
