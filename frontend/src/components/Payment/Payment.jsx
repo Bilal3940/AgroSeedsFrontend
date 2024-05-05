@@ -6,11 +6,12 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners"; 
 import dropin from "braintree-web-drop-in"
-
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [dropInInstance, setDropInInstance] = useState(null);
@@ -64,12 +65,14 @@ const Payment = () => {
     totalPrice: orderData?.totalPrice,
   };
 
-  const paymentData = {
-    amount: Math.round(orderData?.totalPrice * 100),
-  };
 
   const paymentHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    
+    // Start the animation
+
+  
     try {
       if (dropInInstance) {
         dropInInstance.requestPaymentMethod(async (requestPaymentMethodErr, payload) => {
@@ -89,6 +92,9 @@ const Payment = () => {
           
             const result = await response.json();
           
+            // Stop the animation
+
+  
             // Define payment information object
             const paymentInfo = {
               status: result.success ? 'succeeded' : 'failed',
@@ -108,6 +114,7 @@ const Payment = () => {
               .post(`${server}/api/v2/order/create-order`, orderData, config)
               .then((res) => {
                 setOpen(false);
+                setLoading(false);
                 navigate("/order/success");
                 toast.success("Order successful!");
                 localStorage.setItem("cartItems", JSON.stringify([]));
@@ -131,6 +138,7 @@ const Payment = () => {
       toast.error(error);
     }
   };
+  
   
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
@@ -163,15 +171,14 @@ const Payment = () => {
       <div className="w-[90%] 1000px:w-[70%] block 800px:flex">
         <div className="w-full 800px:w-[65%]">
           <PaymentInfo
-          // Opensandbox= {Opensandbox}
           initializeDropIn={initializeDropIn}
             user={user}
             open={open}
             setOpen={setOpen}
-            // onApprove={onApprove}
             createOrder={createOrder}
             paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
+            loading={loading}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -186,7 +193,7 @@ const PaymentInfo = ({
   user,
   open,
   setOpen,
-
+loading,
   initializeDropIn,
 
   paymentHandler,
@@ -199,7 +206,8 @@ const PaymentInfo = ({
     initializeDropIn();
   };
   return (
-    <div className="w-full 800px:w-[95%] bg-[#fff] rounded-md p-5 pb-8">
+    <>
+    <div className={`w-full 800px:w-[95%] bg-[#fff] rounded-md p-5 pb-8 ${loading ? 'blur-sm' : ''}`}>
       {/* select buttons */}
 
       {/* card payment */}
@@ -258,7 +266,16 @@ const PaymentInfo = ({
           </div>
         ) : null}
       </div>
+
     </div>
+    {loading ? (
+        <div className="absolute top-[400px] left-[0px] right-[0px] flex justify-center items-center ">
+          <div>
+            <ClipLoader color="black" size={70} />
+          </div>
+        </div>
+      ) : null}
+          </>
 
   );
 };

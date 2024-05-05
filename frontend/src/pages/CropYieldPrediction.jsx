@@ -3,7 +3,10 @@ import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import field from '../Assests/predic_img.png';
 import { PuffLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 const CropYieldPrediction = () => {
+  const {t} = useTranslation()
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [prediction, setprediction] = useState("")
   const [formData, setFormData] = useState({
@@ -23,41 +26,53 @@ const CropYieldPrediction = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Check if any field is empty
+    if (
+      !formData.fieldArea ||
+      !formData.temperature ||
+      !formData.waterAvailability ||
+      !formData.soilType
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+  
     console.log(formData); // For testing, log form data
-    const url = 'http://127.0.0.1:5000/predict'; // URL to post the data
+    const url = "http://127.0.0.1:5000/predict"; // URL to post the data
     // setShowOTPModal(true)
     try {
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           Region: 1,
           CropType: 2,
           Year: 2024,
-          FieldArea: parseInt(formData.fieldArea), 
+          FieldArea: parseInt(formData.fieldArea),
           Temperature: parseInt(formData.temperature),
-          WaterAvailablity: parseInt(formData.waterAvailability), 
-          SoilType: parseInt(formData.soilType)
-        })
+          WaterAvailablity: parseInt(formData.waterAvailability),
+          SoilType: parseInt(formData.soilType),
+        }),
       });
   
       const data = await response.json();
       // console.log('Response:', data);
-      console.log(data.prediction[0]);
-      setprediction(data.prediction[0]*100)
-      setShowOTPModal(true)
+      // console.log(data.prediction[0]);
+      setprediction(data.prediction[0] * 100);
+      setShowOTPModal(true);
       setFormData({
         fieldArea: "",
         temperature: "",
         waterAvailability: "",
-        soilType: ""
+        soilType: "",
       });
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
+  
   
   return (
     <>
@@ -66,29 +81,29 @@ const CropYieldPrediction = () => {
       <div className="w-[50%]  p-6 items-center justify-center flex">
   {/* Card Content */}
   <div className="bg-[white] shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    <h2 className="text-xl font-bold mb-4">Instructions</h2>
+    <h2 className="text-xl font-bold mb-4">{t("Instructions")}</h2>
     <p className="text-gray-700 text-base">
-      Follow these instructions for accurate predictions:
+      {t("inst")}
     </p>
    
     {/* Temperature */}
-    <h2 className="text-xl font-bold mt-6 mb-2">Temperature</h2>
+    <h2 className="text-xl font-bold mt-6 mb-2">{t("Temperature")}</h2>
     <p className="text-gray-700 text-base">
       <strong>Low:</strong> Temperature less than or equal to 15°C<br />
       <strong>Medium:</strong> Temperature between 15°C and 25°C<br />
       <strong>High:</strong> Temperature between 25°C and 45°C
     </p>
     {/* Water Availability */}
-    <h2 className="text-xl font-bold mt-6 mb-2">Water Availability</h2>
+    <h2 className="text-xl font-bold mt-6 mb-2">{t("Water Availability")}</h2>
     <p className="text-gray-700 text-base">
       <strong>Low:</strong> Less than or equal to 15,000 m³ per hectare<br />
       <strong>Medium:</strong> Between 15,000 m³ and 25,000 m³ per hectare<br />
       <strong>High:</strong> Between 25,000 m³ and 35,000 m³ per hectare
     </p>
     {/* Soil Type */}
-    <h2 className="text-xl font-bold mt-6 mb-2">Soil Type</h2>
+    <h2 className="text-xl font-bold mt-6 mb-2">{t("Soil Type")}</h2>
     <p className="text-gray-700 text-base">
-      Choose your soil type from the following options:
+      {t("Soiltext")}
       <br />
       <strong>-</strong> Loamy
       <br />
@@ -105,9 +120,9 @@ const CropYieldPrediction = () => {
     
 <div className="isolate w-[50%] bg-white p-6 py-24 sm:py-32 ">
   <div className="mx-auto max-w-2xl text-center">
-    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Crop Yield Prediction</h2>
+    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t("Crop Yield Prediction")}</h2>
     <p className="mt-2 text-lg leading-8 text-gray-600">
-      Predicting crop yields for enhanced productivity and sustainability.
+      {t("cyptext")}
     </p>
   </div>
   <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-10">
