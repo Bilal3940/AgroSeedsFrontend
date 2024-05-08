@@ -13,7 +13,7 @@ import Loader from "../Layout/Loader";
 import { BsArrowLeft } from "react-icons/bs";
 import { RxCross1 } from "react-icons/rx";
 import {toast } from "react-toastify"
-const ENDPOINT = "http://localhost:4000/";
+const ENDPOINT = "https://agroseedssocket.onrender.com";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const Inbox = () => {
