@@ -16,7 +16,7 @@ const AllOrders = () => {
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
   }, [dispatch]);
-
+console.log(orders)
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
 

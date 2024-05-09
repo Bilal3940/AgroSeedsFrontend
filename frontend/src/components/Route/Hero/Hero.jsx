@@ -2,15 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 import { useTranslation } from 'react-i18next';
-
+import bgimage from "../../../Assests/bg-image.jpg"
 const Hero = () => {
   const { t } = useTranslation();
   return (
     <div
       className={`relative min-h-[70vh] 400px:min-h-[80vh] w-full bg-no-repeat ${styles.noramlFlex}`}
       style={{
-        backgroundImage:
-          "url(https://images.unsplash.com/photo-1623211268529-69c56e303312?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+        backgroundImage: `url(${bgimage})`,
       }}
     >
       <div className={`${styles.section} w-[90%] 800px:w-[60%]`}>

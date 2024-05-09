@@ -20,7 +20,7 @@ import Ratings from "./Ratings";
 import axios from "axios";
 
 const ProductDetails = ({ data }) => {
-  console.log(data)
+  // console.log(data.shop._id)
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
@@ -73,11 +73,12 @@ const ProductDetails = ({ data }) => {
       }
     }
   };
+  console.log(products)
 
   const totalReviewsLength =
     products &&
     products.reduce((acc, product) => acc + product.reviews.length, 0);
-
+  console.log(totalReviewsLength)
   const totalRatings =
     products &&
     products.reduce(
@@ -85,33 +86,28 @@ const ProductDetails = ({ data }) => {
         acc + product.reviews.reduce((sum, review) => sum + review.rating, 0),
       0
     );
+    console.log(totalRatings)
 
   const avg =  totalRatings / totalReviewsLength || 0;
 
-  const averageRating = avg.toFixed(2);
+  const averageRating = avg.toFixed(0);
+  console.log(averageRating)
 
-
-  // const handleMessageSubmit = async () => {
-  //   if (isAuthenticated) {
-  //     const groupTitle = data._id + user._id;
-  //     const userId = user._id;
-  //     const sellerId = data.shop._id;
-  //     await axios
-  //       .post(`${server}/conversation/create-new-conversation`, {
-  //         groupTitle,
-  //         userId,
-  //         sellerId,
-  //       })
-  //       .then((res) => {
-  //         navigate(`/inbox?${res.data.conversation._id}`);
-  //       })
-  //       .catch((error) => {
-  //         toast.error(error.response.data.message);
-  //       });
-  //   } else {
-  //     toast.error("Please login to create a conversation");
-  //   }
-  // };
+  const handlecreateConversation = async () => {
+    try {
+      const response = await axios.post(`${server}/api/v2/conversation/create-new-conversation`, {
+        groupTitle: data.shop.name,
+        userId: user._id,
+        sellerId: data.shop._id,
+      });
+      console.log(response.data);
+      console.log("conversation created")
+      navigate("/inbox") // Assuming the response contains the newly created conversation data
+    } catch (error) {
+      console.error('Error creating conversation:', error);
+      throw error; // Re-throw the error for the caller to handle
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -121,7 +117,7 @@ const ProductDetails = ({ data }) => {
             <div className="block w-full 800px:flex">
               <div className="w-full 800px:w-[50%]">
                 <img
-                  src={`${data && data.images[select]?.url}`}
+               src={`${data.images && data.images[0]?.url?data.images[0]?.url:data.image }`}
                   alt=""
                   className="w-[80%]"
                 />
@@ -208,7 +204,7 @@ const ProductDetails = ({ data }) => {
                 <div className="flex items-center pt-8">
                   <Link to={`/shop/preview/${data?._id}`}>
                     <img
-                      src={`${data?.image}`}
+                      src={`${data.images && data.images[0]?.url?data.images[0]?.url:data.image }`}
                       alt=""
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
@@ -226,7 +222,7 @@ const ProductDetails = ({ data }) => {
                   <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
                   >
-                    <span className="text-white flex items-center">
+                    <span onClick={handlecreateConversation} className="text-white flex w-[400px] p-2 items-center">
                       Send Message <AiOutlineMessage className="ml-1" />
                     </span>
                   </div>
@@ -282,7 +278,10 @@ const ProductDetailsInfo = ({
             Product Reviews
           </h5>
           {active === 2 ? (
+            <>
             <div className={`${styles.active_indicator}`} />
+
+          </>
           ) : null}
         </div>
         <div className="relative">
@@ -307,33 +306,38 @@ const ProductDetailsInfo = ({
         </>
       ) : null}
 
-      {active === 2 ? (
-        <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
-          {data &&
-            data.reviews.map((item, index) => (
-              <div className="w-full flex my-2">
-                <img
-                  src={`${item.user.avatar?.url}`}
-                  alt=""
-                  className="w-[50px] h-[50px] rounded-full"
-                />
-                <div className="pl-2 ">
-                  <div className="w-full flex items-center">
-                    <h1 className="font-[500] mr-3">{item.user.name}</h1>
-                    <Ratings rating={data?.ratings} />
-                  </div>
-                  <p>{item.comment}</p>
-                </div>
-              </div>
-            ))}
+{active === 2 ? (
+  <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
+    {/* Input field and button */}
 
-          <div className="w-full flex justify-center">
-            {data && data.reviews.length === 0 && (
-              <h5>No Reviews have for this product!</h5>
-            )}
+    {/* Display reviews */}
+    {data && data.reviews.length > 0 ? (
+      data.reviews.map((item, index) => (
+        <div key={index} className="w-full flex my-2">
+          <img
+            src={`${item.user.avatar?.url}`}
+            alt=""
+            className="w-[50px] h-[50px] rounded-full"
+          />
+          <div className="pl-2 ">
+            <div className="w-full flex items-center">
+              <h1 className="font-[500] mr-3">{item.user.name}</h1>
+              {/* Assuming Ratings component is imported and available */}
+             {/* <div className="text-orange-500" > ({item?.rating}/5) Rating </div> */}
+             <Ratings rating={item?.rating} />
+            </div>
+            <p>{item.comment? item.comment :"No"}</p>
           </div>
         </div>
-      ) : null}
+      ))
+    ) : (
+      <div className="w-full flex justify-center">
+        <h5>No reviews for this product yet!</h5>
+      </div>
+    )}
+  </div>
+) : null}
+
 
       {active === 3 && (
         <div className="w-full block 800px:flex p-5">
@@ -341,7 +345,7 @@ const ProductDetailsInfo = ({
             <Link to={`/shop/preview/${data?._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${data?.avatar?.url}`}
+                 src={`${data.images && data.images[0]?.url?data.images[0]?.url:data.image }`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />

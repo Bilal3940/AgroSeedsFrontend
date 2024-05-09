@@ -9,6 +9,7 @@ export const loadUser = () => async (dispatch) => {
       type: "LoadUserRequest",
     });
     const token = localStorage.getItem("token")
+    console.log(token)
     const { data } = await axios.get(`${server}/api/v2/user/getuser`, {
       headers: {
         "x-access-token": token,

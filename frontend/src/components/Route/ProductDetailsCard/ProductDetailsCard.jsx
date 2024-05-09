@@ -19,24 +19,16 @@ import { server } from "../../../server";
 import axios  from "axios";
 import {useNavigate} from "react-router-dom"
 const ProductDetailsCard = ({ setOpen, data }) => {
-  console.log(data)
+  // console.log(data)
   const { cart } = useSelector((state) => state.cart);
-  console.log(cart)
+  // console.log(cart)
   const { user } = useSelector((state) => state.user);
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const navigate = useNavigate();
-  //   const [select, setSelect] = useState(false);
-// console.log(cart,"user", user)
-// console.log(cart[0].shop._id)
-  const handleMessageSubmit = async(id) => {
-    // const item = cart && cart.find((i) => i._id === id);
-    // console.log(item)
-
-  };
-
+// console.log(data)
   const decrementCount = () => {
     if (count > 1) {
       setCount(count - 1);
@@ -62,13 +54,6 @@ const ProductDetailsCard = ({ setOpen, data }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (wishlist && wishlist.find((i) => i._id === data._id)) {
-  //     setClick(true);
-  //   } else {
-  //     setClick(false);
-  //   }
-  // }, [wishlist]);
 
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
@@ -88,7 +73,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
         userId: user._id,
         sellerId: data.shop._id,
       });
-      console.log(response.data);
+      // console.log(response.data);
       console.log("conversation created")
       navigate("/inbox") // Assuming the response contains the newly created conversation data
     } catch (error) {
@@ -128,13 +113,12 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                 </div>
                 <div
                   className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
-                  // onClick={handleMessageSubmit()}
                 >
                   <span onClick={handlecreateConversation} className="text-[#fff] flex items-center">
                     Send Message <AiOutlineMessage  className="ml-1" />
                   </span>
                 </div>
-                <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5>
+           
               </div>
 
               <div className="w-full 800px:w-[50%] pt-5 pl-[5px] pr-[5px]">

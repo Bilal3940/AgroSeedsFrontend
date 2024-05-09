@@ -41,37 +41,18 @@ import axios from "axios";
 import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import EventsPage from "./pages/EventsPage.jsx";
-import Cookies from "js-cookie";
 import ShopActivation from "./pages/Shop/ShopActivation.jsx";
 import Inbox from "./components/inbox/Inbox.jsx";
 import DashboardMessages from "./components/Shop/DashboardMessages.jsx";
 import ShopWithDrawMoneyPage from "./pages/Shop/ShopWithdrawMoneyPage.jsx";
+import CropPricePrediction from "./pages/CropPricePrediction.jsx";
 
 const App = () => {
-  const [stripeApikey, setStripeApiKey] = useState("");
-  // const [user, setuser] = useState({})
 
-  async function getStripeApikey() {
-    const { data } = await axios.get(`${server}/payment/stripeapikey`);
-    setStripeApiKey(data.stripeApikey);
-  }
-  // async function getUser (){
-  //   const token = Cookies.get("token")
-  //   const user = await axios.get("https://agroseedsserver.vercel.app/api/v2/user/getuser", {
-  //       headers: {
-  //         'x-access-token': token,
-  //       },
-      
-  //   });
-  //   setuser(user)
-  // }
   useEffect(() => {
-    // getUser()
     Store.dispatch(loadUser())
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
-    // getStripeApikey();
   }, []);
 
   return (
@@ -88,7 +69,7 @@ const App = () => {
         <Route path="/products" element={ <ProtectedRoute><ProductsPage /></ProtectedRoute>} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/yield-pediction" element={<CropYieldPrediction />} />
-        <Route path="/price-prediction" element={<EventsPage/>} />
+        <Route path="/price-prediction" element={<CropPricePrediction/>} />
         <Route path="/faq" element={<FAQPage />} />
         <Route
           path="/checkout"
@@ -205,6 +186,14 @@ const App = () => {
         />
 
         <Route
+          path="/dashboard/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopOrderDetails />
+            </SellerProtectedRoute>
+          }
+        />
+                <Route
           path="/order/:id"
           element={
             <SellerProtectedRoute>

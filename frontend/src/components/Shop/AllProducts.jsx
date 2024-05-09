@@ -11,11 +11,13 @@ import Loader from "../Layout/Loader";
 const AllProducts = () => {
   const { products, isLoading } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
-
+  console.log(isLoading)
+  console.log(products)
+  console.log(seller)
   const dispatch = useDispatch();
-
+  console.log(seller.shop)
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
+    dispatch(getAllProductsShop(seller?._id));
   }, [dispatch]);
 
   const handleDelete = (id) => {

@@ -109,6 +109,7 @@ const Payment = () => {
             };
   
             const orderData = { ...order, paymentInfo };
+            // console.log(orderData)
   
             await axios
               .post(`${server}/api/v2/order/create-order`, orderData, config)

@@ -28,9 +28,12 @@ const UserOrderDetails = () => {
   const data = orders && orders.find((item) => item._id === id);
 
   const reviewHandler = async (e) => {
-    await axios
-      .put(
-        `${server}/product/create-new-review`,
+    e.preventDefault(); // Prevent default form submission behavior
+  
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${server}/api/v2/product/create-new-review`,
         {
           user,
           rating,
@@ -38,19 +41,27 @@ const UserOrderDetails = () => {
           productId: selectedItem?._id,
           orderId: id,
         },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        toast.success(res.data.message);
-        dispatch(getAllOrdersOfUser(user._id));
-        setComment("");
-        setRating(null);
-        setOpen(false);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+  
+      // Assuming the response contains a message field
+      toast.success(response.data.message);
+  
+      // Update state or perform any other necessary actions
+      dispatch(getAllOrdersOfUser(user._id));
+      setComment("");
+      setRating(null);
+      setOpen(false);
+    } catch (error) {
+      // Handle errors
+      toast.error(error.response.data.message || "An error occurred");
+    }
   };
+  
   
   const refundHandler = async () => {
     await axios.put(`${server}/order/order-refund/${id}`,{
@@ -223,13 +234,6 @@ const UserOrderDetails = () => {
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
           </h4>
           <br />
-           {
-            data?.status === "Delivered" && (
-              <div className={`${styles.button} text-white`}
-              onClick={refundHandler}
-              >Give a Refund</div>
-            )
-           }
         </div>
       </div>
       <br />

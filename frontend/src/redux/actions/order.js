@@ -25,7 +25,8 @@ export const getAllOrdersOfUser = (userId) => async (dispatch) => {
 };
 
 // get all orders of seller
-export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
+export const 
+getAllOrdersOfShop = (shopId) => async (dispatch) => {
   try {
     dispatch({
       type: "getAllOrdersShopRequest",
@@ -34,7 +35,7 @@ export const getAllOrdersOfShop = (shopId) => async (dispatch) => {
     const { data } = await axios.get(
       `${server}/api/v2/order/get-seller-all-orders/${shopId}`
     );
-
+    // console.loh(data)
     dispatch({
       type: "getAllOrdersShopSuccess",
       payload: data.orders,
