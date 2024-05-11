@@ -1,285 +1,198 @@
 import React, { useState } from "react";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
-import prices from '../Assests/prices.png';
+import prices from "../Assests/prices.png";
 import { PuffLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 const CropPricePrediction = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const [showOTPModal, setShowOTPModal] = useState(false);
-  const [prediction, setprediction] = useState("")
-  const [formData, setFormData] = useState({
-    fieldArea: "",
-    temperature: "",
-    waterAvailability: "",
-    soilType: "",
-  });
+  const [prediction, setprediction] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  const jsonData = [
+    {
+      year: 2010,
+      production: 23311,
+      dollar_price: 93.66,
+      wheat_price: 950,
+    },
+    {
+      year: 2011,
+      production: 25214,
+      dollar_price: 102.14,
+      wheat_price: 950,
+    },
+    {
+      year: 2012,
+      production: 23473,
+      dollar_price: 101.005,
+      wheat_price: 1050,
+    },
+    {
+      year: 2013,
+      production: 24211,
+      dollar_price: 102.95,
+      wheat_price: 1200,
+    },
+    {
+      year: 2014,
+      production: 25979,
+      dollar_price: 104.62,
+      wheat_price: 1200,
+    },
+    {
+      year: 2015,
+      production: 25086,
+      dollar_price: 105.38,
+      wheat_price: 1300,
+    },
+    {
+      year: 2016,
+      production: 25633,
+      dollar_price: 122.38,
+      wheat_price: 1300,
+    },
+    {
+      year: 2017,
+      production: 26674,
+      dollar_price: 150.64,
+      wheat_price: 1300,
+    },
+    {
+      year: 2018,
+      production: 25076,
+      dollar_price: 161.51,
+      wheat_price: 1300,
+    },
+    {
+      year: 2019,
+      production: 24349,
+      dollar_price: 162.09,
+      wheat_price: 1300,
+    },
+    {
+      year: 2020,
+      production: 25248,
+      dollar_price: 206.815,
+      wheat_price: 1400,
+    },
+    {
+      year: 2021,
+      production: 27464,
+      dollar_price: 282.83,
+      wheat_price: 1800,
+    },
+    {
+      year: 2022,
+      production: 26400,
+      dollar_price: 278.75,
+      wheat_price: 2200,
+    },
+    {
+      year: 2023,
+      production: 26810,
+      dollar_price: 278.75,
+      wheat_price: 3900,
+    },
+  ];
+  const handlePredict = async (event) => {
+    event.preventDefault(); // Prevent the form from causing a page refresh
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Check if any field is empty
-    if (
-      !formData.fieldArea ||
-      !formData.temperature ||
-      !formData.waterAvailability ||
-      !formData.soilType
-    ) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-  
-    console.log(formData); // For testing, log form data
-    const url = "https://pythonscript.onrender.com/predict"; // URL to post the data
-    // setShowOTPModal(true)
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Region: 1,
-          CropType: 2,
-          Year: 2024,
-          FieldArea: parseInt(formData.fieldArea),
-          Temperature: parseInt(formData.temperature),
-          WaterAvailablity: parseInt(formData.waterAvailability),
-          SoilType: parseInt(formData.soilType),
-        }),
-      });
-  
-      const data = await response.json();
-      // console.log('Response:', data);
-      // console.log(data.prediction[0]);
-      setprediction(data.prediction[0] * 100);
-      setShowOTPModal(true);
-      setFormData({
-        fieldArea: "",
-        temperature: "",
-        waterAvailability: "",
-        soilType: "",
-      });
+      const response = await axios.post(
+        "https://pythonscript.onrender.com/cpppredict"
+      );
+      const data = response.data; // Directly access the data property from Axios response
+      console.log(data.new_prediction[0]);
+      const roundedPrice = parseFloat(data.new_prediction[0]).toFixed(2);
+      setprediction(roundedPrice);
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("Failed to fetch price prediction: " + error.message); // Improved error handling
     }
   };
-  
-  
+
   return (
     <>
-      <Header activeHeading={3} />
-      <div className="flex justify-center" >
-      <div className="w-[50%]  p-6 items-center justify-center flex">
-  {/* Card Content */}
-  <div className="bg-[white] shadow-md rounded px-8 pt-6 pb-8 mb-4">
-    <h2 className="text-xl font-bold mb-4">{t("Instructions")}</h2>
-    <p className="text-gray-700 text-base">
-      {t("inst")}
-    </p>
-   
-    {/* Temperature */}
-    <h2 className="text-xl font-bold mt-6 mb-2">{t("Temperature")}</h2>
-    <p className="text-gray-700 text-base">
-      <strong>Low:</strong> Temperature less than or equal to 15°C<br />
-      <strong>Medium:</strong> Temperature between 15°C and 25°C<br />
-      <strong>High:</strong> Temperature between 25°C and 45°C
-    </p>
-    {/* Water Availability */}
-    <h2 className="text-xl font-bold mt-6 mb-2">{t("Water Availability")}</h2>
-    <p className="text-gray-700 text-base">
-      <strong>Low:</strong> Less than or equal to 15,000 m³ per hectare<br />
-      <strong>Medium:</strong> Between 15,000 m³ and 25,000 m³ per hectare<br />
-      <strong>High:</strong> Between 25,000 m³ and 35,000 m³ per hectare
-    </p>
-    {/* Soil Type */}
-    <h2 className="text-xl font-bold mt-6 mb-2">{t("Soil Type")}</h2>
-    <p className="text-gray-700 text-base">
-      {t("Soiltext")}
-      <br />
-      <strong>-</strong> Loamy
-      <br />
-      <strong>-</strong> Clay
-      <br />
-      <strong>-</strong> Silt
-      <br />
-      <strong>-</strong> Loamy
-    </p>
-  </div>
-</div>
-
-
-    
-<div className="isolate w-[50%] bg-white p-6 py-24 sm:py-32 ">
-  <div className="mx-auto max-w-2xl text-center">
-    <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{t("Crop Yield Prediction")}</h2>
-    <p className="mt-2 text-lg leading-8 text-gray-600">
-      {t("cyptext")}
-    </p>
-  </div>
-  <form onSubmit={handleSubmit} method="POST" className="mx-auto mt-16 max-w-xl sm:mt-10">
-          <div className="sm:col-span-2">
-            {/* Field Area */}
-            <div className="mb-6">
-              <label htmlFor="fieldArea" className="block text-sm font-semibold leading-6 text-gray-900">
-                Field Area (Acres)
-              </label>
-              <div className="mt-2.5">
-              <input
-  type="text"
-  name="fieldArea"
-  id="fieldArea"
-  value={formData.fieldArea}
-  onChange={handleChange}
-  autoComplete=""
-  pattern="[0-9]*" // Accept only digits
-  className="block w-full h-[50px] rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 decoration-none sm:text-sm sm:leading-6"
-/>
-              </div>
-            </div>
-            {/* Temperature */}
-            <div className="mb-6">
-              <label htmlFor="temperature" className="block text-sm font-semibold leading-6 text-gray-900">
-                Temperature
-              </label>
-              <select
-                id="temperature"
-                name="temperature"
-                value={formData.temperature}
-                onChange={handleChange}
-                className="block w-full h-[50px] rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                  <option value="">Select Temperature</option>
-                <option value="15">Low (&le; 15°C)</option>
-                <option value="25">Medium (15°C - 25°C)</option>
-                <option value="45">High (25°C - 45°C)</option>
-              </select>
-            </div>
-            {/* Water Availability */}
-            <div className="mb-6">
-              <label htmlFor="waterAvailability" className="block text-sm font-semibold leading-6 text-gray-900">
-                Water Availability
-              </label>
-              <select
-                id="waterAvailability"
-                name="waterAvailability"
-                value={formData.waterAvailability}
-                onChange={handleChange}
-                className="block w-full h-[50px] rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                  <option value="">Select Water Availablilty</option>
-                <option value="15000">Low (&le; 15,000 m³ per hectare)</option>
-                <option value="25000">Medium (15,000 m³ - 25,000 m³ per hectare)</option>
-                <option value="35000">High (25,000 m³ - 35,000 m³ per hectare)</option>
-              </select>
-            </div>
-            {/* Soil Type */}
-            <div className="mb-6">
-              <label htmlFor="soilType" className="block text-sm font-semibold leading-6 text-gray-900">
-                Soil Type
-              </label>
-              <select
-  id="soilType"
-  name="soilType"
-  value={formData.soilType}
-  onChange={handleChange}
-  className="block w-full h-[50px] rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
->
-  <option value="">Select Soil Type</option>
-  <option value="1">Loamy</option>
-  <option value="2">Clay</option>
-  <option value="3">Silt</option>
-  <option value="4">Other</option>
-</select>
-
-            </div>
+      <Header activeHeading={4} />
+      <div className="items-center justify-center flex">
+        <div className="w-[50%]  p-6 items-center ">
+          {/* Card Content */}
+          <div className="bg-[white] shadow-md rounded px-14 pt-6 pb-8 mb-4">
+            <h2 className="text-center font-bold">
+              Production and Price Trends for Wheat (2010-2023)
+            </h2>
+            <br />
+            <table className="table-auto w-full">
+              <thead>
+                <tr>
+                  <th className="text-left font-semibold">Year</th>
+                  <th className="text-center  font-semibold">
+                    Production(1000 MT)
+                  </th>
+                  <th className="text-right font-semibold">Wheat Price/50kg</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jsonData.map((item, index) => (
+                  <tr key={index} className=" border-b">
+                    <td className="text-left p-2">{item.year}</td>
+                    <td className="text-center p-2">{item.production}</td>
+                    <td className="text-right p-2">{item.wheat_price}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="mt-10">
-            <button
-              type="submit"
-              className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        </div>
+
+        <div className="isolate w-[50%] bg-white p-6 py-24 sm:py-32">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Crop Price Prediction
+            </h2>
+            <p className="mt-2 text-lg leading-8 text-gray-600">
+              Enter the details below to predict the crop prices based on
+              historical data and other influencing factors.
+            </p>
+            <form
+              className="flex flex-col items-center"
+              onSubmit={handlePredict}
             >
-              Calculate
-            </button>
-          </div>
-        </form>
-</div>
+              <select
+                className="border-2 w-full border-gray-300 p-2 rounded-lg"
+                name="cropType"
+                id="cropType"
+              >
+                <option value="wheat">Wheat</option>
+              </select>
+              <button
+                type="submit"
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg"
+              >
+                Calculate Price
+              </button>
+            </form>
 
-
-    <div className="w-[50%] p-6 items-center justify-center flex">
-  {/* Card Content */}
-  <div className="bg-white shadow-md rounded ">
-    <img src={prices} alt="" />
-  </div>
-</div>
-
-{showOTPModal && (
-          <div className="absolute z-10 p-20 inset-0 ">
-            <div className="flex items-end justify-center  pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              {/* Background overlay */}
-              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-              </div>
-  
-              {/* Centered content */}
-              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                {/* Modal Header with Close Button */}
-                <div className="absolute top-0 right-0 p-4 cursor-pointer">
-                  <button onClick={() => setShowOTPModal(false)}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="h-6 w-6 text-gray-500"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-  
-                {/* OTP Form */}
-                <form >
-                  <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h2
-                          className="text-lg leading-6 font-medium text-gray-900"
-                          id="modal-title"
-                        >
-                          Crop Yield Prediction
-                        </h2>
-                        <p style={{ color: "red", fontSize: "20px" }}>
-                          The Results of the predictions are:
-                        </p>
-                        <div className="mt-2">
-                          Production: {prediction} kg/acre
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                </form>
-              </div>
+            <div className="mt-4">
+              {prediction && (
+                <p className="text-lg shadow-lg text-bold border h-[80px] text-center items-center  flex justify-center text-bold">
+                  The Forcasted wheat price for year 2024 is: {prediction}/50kg.
+                </p>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-    </div>
+        <div className="w-[50%] p-8 items-center justify-center flex">
+          {/* Card Content */}
+          <div className="bg-white shadow-md rounded ">
+            <img width="625px" src={prices} alt="" />
+          </div>
+        </div>
+      </div>
       <Footer />
     </>
   );

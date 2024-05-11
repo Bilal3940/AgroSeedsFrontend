@@ -26,7 +26,6 @@ const UserOrderDetails = () => {
   }, [dispatch,user._id]);
 
   const data = orders && orders.find((item) => item._id === id);
-
   const reviewHandler = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
   
@@ -61,19 +60,6 @@ const UserOrderDetails = () => {
       toast.error(error.response.data.message || "An error occurred");
     }
   };
-  
-  
-  const refundHandler = async () => {
-    await axios.put(`${server}/order/order-refund/${id}`,{
-      status: "Processing refund"
-    }).then((res) => {
-       toast.success(res.data.message);
-    dispatch(getAllOrdersOfUser(user._id));
-    }).catch((error) => {
-      toast.error(error.response.data.message);
-    })
-  };
-
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -97,11 +83,12 @@ const UserOrderDetails = () => {
       <br />
       {data &&
         data?.cart.map((item, index) => {
+
           return(
           <div className="w-full flex items-start mb-5">
             <img
-              src={`${item.images[0]?.url}`}
-              alt=""
+              src={`${item.images && item.images[0]?.url?item.images[0]?.url:item.image }`} alt=""
+
               className="w-[80x] h-[80px]"
             />
             <div className="w-full">
