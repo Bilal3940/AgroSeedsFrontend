@@ -6,12 +6,15 @@ import { PuffLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { AiOutlineClose } from 'react-icons/ai';
 
 const CropPricePrediction = () => {
   const { t } = useTranslation();
   const [showOTPModal, setShowOTPModal] = useState(false);
   const [prediction, setprediction] = useState("");
-
+  const handleRemovePrediction = () => {
+    setprediction(false);
+  };
   const jsonData = [
     {
       year: 2010,
@@ -176,13 +179,23 @@ const CropPricePrediction = () => {
               </button>
             </form>
 
-            <div className="mt-4">
-              {prediction && (
-                <p className="text-lg shadow-lg text-bold border h-[80px] text-center items-center  flex justify-center text-bold">
-                  The Forcasted wheat price for year 2024 is: {prediction}/50kg.
-                </p>
-              )}
-            </div>
+           
+
+<div className="mt-4">
+      { prediction && (
+        <div className="relative shadow-lg border h-[80px] flex justify-center items-center text-lg text-bold">
+          <div className="absolute right-2 top-2">
+            <button onClick={handleRemovePrediction}>
+              <AiOutlineClose />
+            </button>
+          </div>
+          <p>
+            The Forecasted wheat price for year 2024 is: {prediction}/50kg.
+          </p>
+        </div>
+      )}
+    </div>
+
           </div>
         </div>
 

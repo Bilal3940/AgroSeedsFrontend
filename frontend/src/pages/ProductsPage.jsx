@@ -25,6 +25,22 @@ const ProductsPage = () => {
        window.scrollTo(0,0);
   }, [allProducts]);
 
+// useEffect(() => {
+//     let filteredProducts = allProducts;
+  
+//     if (categoryData) {
+//       filteredProducts = filteredProducts.filter(product => product.category === categoryData);
+//     }
+  
+//     // Filter products whose names start with 'a'
+//     filteredProducts = filteredProducts.filter(product => !product.name.toLowerCase().startsWith('a'));
+  
+//     setData(filteredProducts);
+//     window.scrollTo(0, 0);
+//   }, [allProducts, categoryData]);
+
+
+
   return (
   <>
   {

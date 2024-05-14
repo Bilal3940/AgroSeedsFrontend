@@ -20,8 +20,7 @@ export const createProduct =
         type: "productCreateRequest",
       });
 
-      const { data } = await axios.post(
-        `${server}/api/v2/product/create-product`,
+      const { data } = await axios.post(`${server}/api/v2/product/create-product`,
         name,
         description,
         category,
@@ -54,6 +53,7 @@ export const getAllProductsShop = (id) => async (dispatch) => {
     const { data } = await axios.get(
       `${server}/api/v2/product/get-all-products-shop/${id}`
     );
+    console.log(data)
     dispatch({
       type: "getAllProductsShopSuccess",
       payload: data.products,
@@ -77,7 +77,9 @@ export const deleteProduct = (id) => async (dispatch) => {
     const { data } = await axios.delete(
       `${server}/api/v2/product/delete-shop-product/${id}`,
       {
-        withCredentials: true,
+        headers: {
+          "x-access-token": localStorage.getItem("seller_token")
+        }
       }
     );
 
@@ -85,6 +87,9 @@ export const deleteProduct = (id) => async (dispatch) => {
       type: "deleteProductSuccess",
       payload: data.message,
     });
+
+    // Reload the window after a successful deletion
+    window.location.reload();
   } catch (error) {
     dispatch({
       type: "deleteProductFailed",
@@ -92,6 +97,7 @@ export const deleteProduct = (id) => async (dispatch) => {
     });
   }
 };
+
 
 // get all products
 export const getAllProducts = () => async (dispatch) => {

@@ -21,10 +21,22 @@ const AllProducts = () => {
   }, [dispatch]);
 
   const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
-    window.location.reload();
-  };
+   
 
+    dispatch(deleteProduct(id))
+      .then(() => {
+        // Assuming you have a way to check if the delete was successful:
+        const updatedProducts = products.filter(product => product._id !== id);
+        // Update your state here
+        // This is just a placeholder, adjust according to your state management strategy
+        products(updatedProducts);
+      })
+      .catch(error => {
+        // Handle error (show an error message)
+        console.error("Failed to delete product", error);
+      });
+     
+  };
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
     {

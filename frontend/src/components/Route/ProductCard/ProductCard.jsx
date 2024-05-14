@@ -96,9 +96,6 @@ const ProductCard = ({ data,isEvent }) => {
                 Rs.{  data.originalPrice ? data.originalPrice + "" : null}
               </h4>
             </div>
-            <span className="font-[400] text-[17px] text-[#68d284]">
-              40 sold
-            </span>
           </div>
         </Link>
 
