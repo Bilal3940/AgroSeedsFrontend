@@ -11,7 +11,7 @@ import { HiOutlineReceiptRefund } from "react-icons/hi";
 
 const DashboardSideBar = ({ active }) => {
   return (
-    <div className="w-[250px] h-[90vh] bg-white shadow-sm  fixed top-30 left-0 z-10">
+    <div className="w-[250px] h-[90vh] bg-white shadow-sm  fixed top-20 left-0 z-10">
       {/* single item */}
       <div className="w-full flex items-center p-4">
         <Link to="/dashboard" className="w-full flex items-center">
@@ -107,38 +107,6 @@ const DashboardSideBar = ({ active }) => {
             }`}
           >
             Shop Inbox
-          </h5>
-        </Link>
-      </div>
-
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-coupouns" className="w-full flex items-center">
-          <AiOutlineGift
-            size={30}
-            color={`${active === 9 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 9 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Discount Codes
-          </h5>
-        </Link>
-      </div>
-
-      <div className="w-full flex items-center p-4">
-        <Link to="/dashboard-refunds" className="w-full flex items-center">
-          <HiOutlineReceiptRefund
-            size={30}
-            color={`${active === 10 ? "crimson" : "#555"}`}
-          />
-          <h5
-            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
-              active === 10 ? "text-[crimson]" : "text-[#555]"
-            }`}
-          >
-            Refunds
           </h5>
         </Link>
       </div>

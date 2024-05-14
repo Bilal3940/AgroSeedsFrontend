@@ -205,7 +205,7 @@ const CropPricePrediction = () => {
             <img width="625px" src={prices} alt="" />
           </div>
         </div>
-      </div>
+      </div>ss
       <Footer />
     </>
   );

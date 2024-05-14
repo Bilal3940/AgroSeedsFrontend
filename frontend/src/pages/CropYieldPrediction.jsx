@@ -38,7 +38,7 @@ const CropYieldPrediction = () => {
     }
   
     console.log(formData); // For testing, log form data
-    const url = "https://pythonscript.onrender.com/predict"; // URL to post the data
+    const url = "https://pythonscript.onrender.com/cyppredict"; // URL to post the data
     // setShowOTPModal(true)
     try {
       const response = await fetch(url, {
