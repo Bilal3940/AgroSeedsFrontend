@@ -33,6 +33,7 @@ const Payment = () => {
 
   useEffect(() => {
     const orderData = JSON.parse(localStorage.getItem("latestOrder"));
+    // console.log(orderData)
     setOrderData(orderData);
   }, []);
 
@@ -120,6 +121,7 @@ const Payment = () => {
                 toast.success("Order successful!");
                 localStorage.setItem("cartItems", JSON.stringify([]));
                 localStorage.setItem("latestOrder", JSON.stringify([]));
+                window.location.reload()
               });
   
             // Handle success or failure
@@ -162,7 +164,7 @@ const Payment = () => {
       toast.success("Order successful!");
       localStorage.setItem("cartItems", JSON.stringify([]));
       localStorage.setItem("latestOrder", JSON.stringify([]));
-      // window.location.reload();
+      window.location.reload();
     });
   };
 
@@ -176,7 +178,6 @@ const Payment = () => {
             user={user}
             open={open}
             setOpen={setOpen}
-            createOrder={createOrder}
             paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
             loading={loading}
